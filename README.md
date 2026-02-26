@@ -1,69 +1,83 @@
-# Getting Started with Create React App
+🌸 osu! Analytics Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Это современное веб-приложение для глубокой аналитики профилей игроков osu!. Проект сочетает в себе эстетичный дизайн (Sakura/Dark theme) и мощные инструменты визуализации данных.
 
-## Available Scripts
+Проект состоит из фронтенда на React и серверной части на Vercel Serverless Functions.
+Основные возможности
 
-In the project directory, you can run:
+    OAuth2 Авторизация: Безопасный вход через официальный сервис osu!.
 
-### `npm start`
+    Интерактивный Дашборд: Визуализация статистики (PP, Rank, Accuracy) с помощью графиков Recharts.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    Deep Analytics: Радарные диаграммы навыков (Aim, Speed, Consistency и др.).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    Умные рекомендации: Алгоритм подбора карт на основе истории игр пользователя.
 
-### `npm test`
+    Мультиязычность: Полная поддержка русского и английского языков.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    Адаптивный дизайн: Удобная работа как на ПК, так и на мобильных устройствах.
 
-### `npm run build`
+Как запустить локально
+1. Подготовка окружения
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Создайте файл .env в корневом каталоге и добавьте туда свои ключи от osu! dev panel:
+Фрагмент кода
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+OSU_CLIENT_ID=ваш_id
+OSU_CLIENT_SECRET=ваш_secret
+REDIRECT_URI=http://localhost:3000
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Установка зависимостей
 
-### `npm run eject`
+В директории проекта выполните:
+Bash
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Запуск приложения
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Для работы функций бекенда (API) рекомендуется использовать Vercel CLI:
+Bash
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+vercel dev
 
-## Learn More
+Приложение откроется по адресу http://localhost:3000.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Страница будет автоматически перезагружаться при внесении изменений в код.
+Доступные скрипты
+npm start
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Запускает только фронтенд в режиме разработки.
+Примечание: API запросы к osu! не будут работать без запущенного серверного прокси.
+npm run build
 
-### Code Splitting
+Создает оптимизированную сборку приложения в папку build.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Ваше приложение готово к деплою!
+npm run eject
 
-### Analyzing the Bundle Size
+Внимание: это необратимая операция! Если вас не устраивают стандартные настройки сборки, вы можете «извлечь» конфигурационные файлы.
+Структура проекта
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    src/App.jsx — основная логика фронтенда, роутинг и интерфейс.
 
-### Making a Progressive Web App
+    api/server.js — серверная функция (Node.js) для обмена OAuth-кодов на токены и работы с API osu!.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    src/components/ — (рекомендуется) вынести сюда визуальные элементы.
 
-### Advanced Configuration
+Стек технологий
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    Frontend: React, Recharts (графики), Lucide-React (иконки), Framer Motion (анимации).
 
-### Deployment
+    Backend: Node.js, Axios, Vercel Functions.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    API: osu! API v2.
+
+Изучить больше
+
+Вы можете узнать больше в документации osu! API.
+
+Для настройки деплоя загляните в Vercel Documentation.
 
 ### `npm run build` fails to minify
 
