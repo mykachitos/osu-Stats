@@ -412,7 +412,7 @@ export default function App() {
   const [authError, setAuthError] = useState(null); 
 
 
-//  никит я ебал ТВОЙ РОТ ПОЧЕМУ У ТЕБЯ ВЕСЬ ФРОНТЕДН В ОДНОМ ФАЙЛЕ НА 2 ТЫЩИ СТРОК
+//  никит я ебал ТВОЙ РОТ ПОЧЕМУ У ТЕБЯ ВЕСЬ ФРОНТЕДН В ОДНОМ ФАЙЛЕ НА 2 ТЫЩИ СТРОК// СОРЯМБА ХУЯМБА
 useEffect(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
@@ -480,15 +480,33 @@ useEffect(() => {
     );
   }
 
-  // 1. Достаем реального юзера из контекста
-const { user } = useAuth(); 
-// 2. Теперь в pageMap передаем именно эту переменную
-const pageMap = {
-  dashboard: <Dashboard user={user} />, 
-  profile:   <Profile user={user} />,
-  stats:     <Statistics user={user} />,
-  maps:      <MapCatalog />,
-  admin:     <AdminPanel />,
+  const App = () => {
+  // 1. ХУК useAuth позволяет нам получить данные текущего пользователя и функцию выхода из контекста аутентификации  
+  const { user, logout, loading } = useAuth(); 
+  const [page, setPage] = useState("dashboard");
+
+  // 2. ЕСЛИ ДАННЫЕ ЕЩЁ ЗАГРУЖАЮТСЯ, ПОКАЗЫВАЕМ ЭКРАН ЗАГРУЗКИ А НЕ ПУСТОЙ ДАШБОАРД А ТО ХУЛИ СИДЕТЬ НА ПУСТОМ ЭКРАНЕ
+  if (loading) return <div className="loading-screen">Loading...</div>;
+
+  // 3. ТЕПЕРЬ определяем pageMap, используя данные из useAuth НУ И ВСЕ ЕБАТЬ БАЙБАЙ ПУСТЫЕ ЭКРАНЫ
+  const pageMap = {
+    dashboard: <Dashboard user={user} />, 
+    profile:   <Profile user={user} />,
+    stats:     <Statistics user={user} />,
+    maps:      <MapCatalog />,
+    admin:     <AdminPanel />,
+  };
+
+  return (
+    <div className="app-container">
+      {/* Передаем всё необходимое в Topbar */}
+      <Topbar title="osu! Stats" onMenu={() => setSidebarOpen(true)} />
+      
+      <main>
+        {pageMap[page]}
+      </main>
+    </div>
+  );
 };
   return (
     <LangCtx.Provider value={{lang, t, setLang}}>
