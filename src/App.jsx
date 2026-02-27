@@ -233,10 +233,14 @@ const LoginModal = ({ onClose, onSuccess }) => {
   const [step, setStep] = useState(0); // 0=prompt, 1=loading, 2=success
 
   const handleLogin = () => {
-    const clientID= '49185'
-    const redirectUri = encodeURIComponent('https://osu-stats-experiments.vercel.app/');
-    window.location.href = `https://osu.ppy.sh/oauth/authorize?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=identify+public`;
-  };
+  // Замени эти данные на свои из Dashboard osu! (Settings -> OAuth)
+  const clientID = '49185'; 
+  const redirectUri = encodeURIComponent('https://osu-stats-experiments.vercel.app/'); // Или твой домен Vercel
+  
+  const authUrl = `https://osu.ppy.sh/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectUri}&response_type=code&scope=identify+public`;
+  
+  window.location.href = authUrl;
+};
 
   return (
     <div style={{
@@ -301,46 +305,50 @@ const LoginModal = ({ onClose, onSuccess }) => {
 ══════════════════════════════════════════ */
 const Topbar = ({ title, onMenu }) => {
   const { t } = useLang();
-  // ну тут мы используем хук useAuth, который мы создали в AuthContext.jsx, чтобы получить данные о пользователе и функцию выхода из системы. Это позволяет нам отображать имя пользователя и кнопку выхода в топбаре.
+  // Используем наш хук: вытаскиваем объект user и функцию logout
   const { user, logout } = useAuth(); 
 
   return (
     <div style={{
-      height:58, borderBottom:"1px solid var(--border)",
-      background:"rgba(7,11,20,0.85)", backdropFilter:"blur(12px)",
-      display:"flex", alignItems:"center", padding:"0 24px", gap:14,
-      position:"sticky", top:0, zIndex:100,
+      height: 58, borderBottom: "1px solid var(--border)",
+      background: "rgba(7,11,20,0.85)", backdropFilter: "blur(12px)",
+      display: "flex", alignItems: "center", padding: "0 24px", gap: 14,
+      position: "sticky", top: 0, zIndex: 100,
     }}>
       <button onClick={onMenu} className="btn-ghost" style={{
-        display:"none", padding:"6px 10px", fontSize:16, borderRadius:8,
+        display: "none", padding: "6px 10px", fontSize: 16, borderRadius: 8,
       }} id="mobile-menu-btn">☰</button>
 
-      <h1 className="syne" style={{fontSize:16, fontWeight:700}}>{title}</h1>
+      <h1 className="syne" style={{ fontSize: 16, fontWeight: 700 }}>{title}</h1>
 
-      <div style={{marginLeft:"auto", display:"flex", alignItems:"center", gap:12}}>
-        <ThemeSwitcher/>
-        <LangToggle/>
+      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+        <ThemeSwitcher />
+        <LangToggle />
 
-        {/* Секция пользователя */}
-        <div style={{
-          display: "flex", alignItems: "center", gap: 8,
-          background: "var(--card2)", border: "1px solid var(--border)",
-          borderRadius: 20, padding: "5px 12px", cursor: "pointer",
-        }} onClick={logout} title="Click to Logout">
-          
-          {/* Индикатор онлайна (зеленая точка) */}
+        {/* Секция пользователя: клик по всей плашке вызовет выход */}
+        <div 
+          style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: "var(--card2)", border: "1px solid var(--border)",
+            borderRadius: 20, padding: "5px 12px", cursor: "pointer",
+          }} 
+          onClick={logout} 
+          title={user ? "Click to Logout" : "Please login"}
+        >
+          {/* Индикатор статуса: зеленый если залогинен, серый если нет */}
           <div style={{
             width: 7, height: 7, borderRadius: "50%", 
-            background: user ? "#4ade80" : "#94a3b8", // Зеленый если вошел, серый если нет
+            background: user ? "#4ade80" : "#94a3b8", 
             boxShadow: user ? "0 0 6px rgba(74,222,128,0.6)" : "none"
           }}/>
 
-          <span style={{fontSize: 12, color: "var(--muted)", fontWeight: 500}}>
-            {/* Если юзер есть — пишем ник, если нет — Guest */}
+          {/* А вот и твой динамический ник */}
+          <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 500 }}>
             {user ? user.username : 'Guest'}
           </span>
 
-          {user && <span style={{fontSize: 10, opacity: 0.5, marginLeft: 4}}>Log out ↪</span>}
+          {/* Показываем значок выхода только если пользователь авторизован */}
+          {user && <span style={{ fontSize: 10, opacity: 0.5, marginLeft: 4 }}>Log out ↪</span>}
         </div>
       </div>
     </div>
@@ -472,14 +480,16 @@ useEffect(() => {
     );
   }
 
-  const pageMap = {
-    dashboard: <Dashboard user={userData || MOCK_PLAYER} />,
-    profile: <Profile user={userData || MOCK_PLAYER} />,
-    stats: <Statistics user={userData || MOCK_PLAYER} />,
-    maps:      <MapCatalog/>,
-    admin:     <AdminPanel/>,
-  };
-
+  // 1. Достаем реального юзера из контекста
+const { user } = useAuth(); 
+// 2. Теперь в pageMap передаем именно эту переменную
+const pageMap = {
+  dashboard: <Dashboard user={user} />, 
+  profile:   <Profile user={user} />,
+  stats:     <Statistics user={user} />,
+  maps:      <MapCatalog />,
+  admin:     <AdminPanel />,
+};
   return (
     <LangCtx.Provider value={{lang, t, setLang}}>
       <ThemeCtx.Provider value={{theme,themeKey,setTheme:k=>setThemeKey(k)}}>
