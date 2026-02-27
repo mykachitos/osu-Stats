@@ -300,6 +300,9 @@ const LoginModal = ({ onClose, onSuccess }) => {
 ══════════════════════════════════════════ */
 const Topbar = ({ title, onMenu, onLogout }) => {
   const { t } = useLang();
+  // вася я я ща пью колу кушаю питсу вот вроде норм должно быть
+  const { user } = useAuth(); 
+
   return (
     <div style={{
       height:58,borderBottom:"1px solid var(--border)",
