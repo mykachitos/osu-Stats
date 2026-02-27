@@ -481,36 +481,35 @@ useEffect(() => {
   }
 
   const App = () => {
-  // 1. Сначала ПРИЗЫВАМ ХУК useAuth, чтобы получить данные пользователя и статус загрузки ВАСЬ ЭТО ПИЗДЕЦ МЫ ЭТУ ХУЙНЮ ЕЩЕ ДЕЛАТЬ БУДЕМ СТО ЛЕТ Я УЖЕ ЧАС ЕБУСЬ ЧТОБЫ НИК ПОКАЗЫВАЛА. ПРОСТО ВЫВОД ЕБАНОГО НИКА А НИ ЭТА ХУЙНЯ ЭТО ПИЗДЕЦ
-  const { user, logout, loading } = useAuth(); 
+  // 1. СНАЧАЛА ХУКИ (Всегда самые первые!)
+  const { user, logout, loading } = useAuth();
   const [page, setPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. Логика загрузки (ставим ПОСЛЕ хуков, но ДО pageMap)
+  // 2. ЗАТЕМ УСЛОВИЯ ЗАГРУЗКИ
+  // Если ты сделаешь return здесь, всё что ниже не выполнится. 
+  // Но хуки выше уже успеют отработать, и это правильно.
   if (loading) {
-    return <div className="loading-screen">Loading...</div>;
+    return <div className="loading">Loading stats...</div>;
   }
 
-  // 3. ТЕПЕРЬ создаем pageMap (уже после того, как убедились, что не грузимся)
+  // 3. ТЕПЕРЬ ОБЪЯВЛЯЕМ PAGEMAP
+  // Она должна быть ВНЕ return, но ВНУТРИ компонента App.
   const pageMap = {
-    dashboard: <Dashboard user={user} />, 
+    dashboard: <Dashboard user={user} />,
     profile:   <Profile user={user} />,
     stats:     <Statistics user={user} />,
     maps:      <MapCatalog />,
     admin:     <AdminPanel />,
   };
 
-  // 4. И только в самом конце — return
+  // 4. И В САМОМ КОНЦЕ — ВЫВОД (RETURN)
   return (
     <div className="app-layout">
-      {/* Теперь и Topbar, и pageMap видят переменную 'user' */}
-      <Topbar 
-        title="osu! Stats" 
-        onMenu={() => setSidebarOpen(true)} 
-      />
+      <Topbar title="osu! Stats" onMenu={() => setSidebarOpen(true)} />
       
       <main className="content">
-        {/* Вот тут вызывается pageMap, и теперь он точно определен выше */}
+        {/* Строка 541 теперь видит pageMap, потому что он создан выше! */}
         {pageMap[page] || <Dashboard user={user} />}
       </main>
     </div>
