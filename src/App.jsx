@@ -481,35 +481,31 @@ useEffect(() => {
   }
 
   const App = () => {
-  // 1. СНАЧАЛА ХУКИ (Всегда самые первые!)
+  // 1. ХУКИ (useAuth, useState) — всегда первыми
   const { user, logout, loading } = useAuth();
   const [page, setPage] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. ЗАТЕМ УСЛОВИЯ ЗАГРУЗКИ
-  // Если ты сделаешь return здесь, всё что ниже не выполнится. 
-  // Но хуки выше уже успеют отработать, и это правильно.
-  if (loading) {
-    return <div className="loading">Loading stats...</div>;
-  }
+  // 2. ПРОВЕРКА ЗАГРУЗКИ
+  if (loading) return <div>Loading...</div>;
 
-  // 3. ТЕПЕРЬ ОБЪЯВЛЯЕМ PAGEMAP
-  // Она должна быть ВНЕ return, но ВНУТРИ компонента App.
+  // 3. ОБЪЯВЛЯЕМ pageMap (ДО return!)
+  // Убедись, что это написано ПРЯМО ЗДЕСЬ, а не внутри другого компонента
   const pageMap = {
     dashboard: <Dashboard user={user} />,
-    profile:   <Profile user={user} />,
-    stats:     <Statistics user={user} />,
-    maps:      <MapCatalog />,
-    admin:     <AdminPanel />,
+    profile: <Profile user={user} />,
+    stats: <Statistics user={user} />,
+    maps: <MapCatalog />,
+    admin: <AdminPanel />,
   };
 
-  // 4. И В САМОМ КОНЦЕ — ВЫВОД (RETURN)
+  // 4. ТВОЙ RETURN
   return (
     <div className="app-layout">
-      <Topbar title="osu! Stats" onMenu={() => setSidebarOpen(true)} />
-      
-      <main className="content">
-        {/* Строка 541 теперь видит pageMap, потому что он создан выше! */}
+      {/* Передаем данные в Topbar */}
+      <Topbar title="osu! Stats" />
+
+      <main>
+        {/* Строка 548 теперь ТОЧНО увидит pageMap */}
         {pageMap[page] || <Dashboard user={user} />}
       </main>
     </div>
