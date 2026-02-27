@@ -495,7 +495,7 @@ useEffect(() => {
     maps: <MapCatalog />,
     admin: <AdminPanel />,
   };
-ё
+
   // 4. ТВОЙ RETURN
   return (
     <div className="app-layout">
