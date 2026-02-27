@@ -107,13 +107,37 @@ const Dashboard = ({ user }) => {
 
         {/* Stats row */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(120px,1fr))", gap: 12, marginTop: 24 }}>
-          {[
-            { l: lang === "ru" ? "Глоб. рейтинг" : "Global Rank", v: `#${fmt(p.global_rank || p.globalRank || 0)}`, icon: "🌍", c: "var(--a)" },
-            { l: lang === "ru" ? "Рейтинг страны" : "Country Rank", v: `#${fmt(p.country_rank || p.countryRank || 0)}`, icon: "🏆", c: "var(--amber)" },
-            { l: lang === "ru" ? "Точность" : "Accuracy", v: `${p.accuracy || 0}%`, icon: "◎", c: "#68d891" },
-            { l: lang === "ru" ? "Игр" : "Play Count", v: fmt(p.play_count || p.playCount || 0), icon: "▶", c: "#7eb8f7" },
-            { l: lang === "ru" ? "Время" : "Play Time", v: p.play_time || p.playTime || '0h', icon: "⏱", c: "#c084fc" },
-            { l: lang === "ru" ? "Макс. комбо" : "Max Combo", v: `${fmt(p.max_combo || p.maxCombo || 0)}x`, icon: "🔥", c: "#f87171" },
+         {[
+  { 
+    l: lang === "ru" ? "Глоб. рейтинг" : "Global Rank", 
+    v: `#${fmt(p.statistics?.global_rank || 0)}`, 
+    icon: "🌍", c: "var(--a)" 
+  },
+  { 
+    l: lang === "ru" ? "Рейтинг страны" : "Country Rank", 
+    v: `#${fmt(p.statistics?.country_rank || 0)}`, // В API это p.statistics.country_rank
+    icon: "🏆", c: "var(--amber)" 
+  },
+  { 
+    l: lang === "ru" ? "Точность" : "Accuracy", 
+    v: `${(p.statistics?.hit_accuracy || 0).toFixed(2)}%`, // В API это hit_accuracy
+    icon: "◎", c: "#68d891" 
+  },
+  { 
+    l: lang === "ru" ? "Игр" : "Play Count", 
+    v: fmt(p.statistics?.play_count || 0), 
+    icon: "▶", c: "#7eb8f7" 
+  },
+  { 
+    l: lang === "ru" ? "Время" : "Play Time", 
+    v: `${Math.floor((p.statistics?.play_time || 0) / 3600)}h`, // API присылает СЕКУНДЫ. Делим на 3600 для часов.
+    icon: "⏱", c: "#c084fc" 
+  },
+  { 
+    l: lang === "ru" ? "Макс. комбо" : "Max Combo", 
+    v: `${fmt(p.statistics?.maximum_combo || 0)}x`, // В API это maximum_combo
+    icon: "🔥", c: "#f87171" 
+  },
           ].map((s, i) => (
             <div key={i} style={{
               background: "var(--bg2)", borderRadius: 12, padding: "12px 14px",
