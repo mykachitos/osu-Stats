@@ -4,6 +4,8 @@ import {
   ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis,
   AreaChart, Area,
 } from "recharts";
+
+//импортируем все отовсюду
 import { T } from './constants/translations';
 import { THEMES } from './constants/themes';
 import { MOCK_PLAYER, RECOMMENDED_MAPS, ADMIN_USERS } from './constants/mockData';
@@ -230,8 +232,8 @@ const LoginModal = ({ onClose, onSuccess }) => {
   const [step, setStep] = useState(0); // 0=prompt, 1=loading, 2=success
 
   const handleLogin = () => {
-    const clientID= '49205' // ВАСЬ КАКОЙ ТЫ ГАНДОН ЭТО ПИЗДЕЦ Я ЕБАЛСЯ С ЭТОЙ ХУЙНЕЙ ТЫЩУ ЛЕТ А ТУТ ТВОЙ ЕБАНЫЙ URL 
-    const redirectUri = encodeURIComponent('https://osu-stats-five.vercel.app//');
+    const clientID= '49185'
+    const redirectUri = encodeURIComponent('https://osu-stats-experiments.vercel.app/');
     window.location.href = `https://osu.ppy.sh/oauth/authorize?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=identify+public`;
   };
 
