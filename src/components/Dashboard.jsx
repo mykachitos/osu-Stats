@@ -15,6 +15,8 @@ const Dashboard = ({ user }) => {
   const [filter, setFilter] = useState(0);
   const { t, lang } = useLang();
   const dt = t.dash;
+  
+  console.log("DEBUG USER OBJECT:", user);
 
   // 1. СТРОГАЯ ПРОВЕРКА (сначала хуки, потом это)
   if (!user) {
