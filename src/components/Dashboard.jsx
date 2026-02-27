@@ -39,7 +39,7 @@ const Dashboard = ({ user }) => {
   // 3. БЕЗОПАСНЫЙ ТИР 
   const getTier = (pp) => {
     const topPP = p.topPlay?.pp || p.pp || 0;
-    const d = pp - topPP;
+    const d = pp - topPP
     
     if (d > 50) return { i: 3, label: dt.filters[3], c: "#f87171", bg: "rgba(248,113,113,0.12)" };
     if (d > 0) return { i: 2, label: dt.filters[2], c: "var(--amber)", bg: "var(--amberDim)" };
@@ -131,12 +131,12 @@ const Dashboard = ({ user }) => {
     },
     { 
         l: lang === "ru" ? "Время" : "Play Time", 
-        v: `${Math.floor((stats.play_time || 0) / 3600)}h`, 
-        icon: "⏱", c: "#c084fc" 
+        v: `${Math.floor((stats.total_seconds_played || 0) / 3600)}h`, 
+        icon: "⏱", c: "#c084fc"
     },
     { 
         l: lang === "ru" ? "Макс. комбо" : "Max Combo", 
-        v: `${fmt(stats.maximum_combo || 0)}x`, 
+        v: stats.maximum_combo ? `${fmt(stats.maximum_combo)}x` : "0x", 
         icon: "🔥", c: "#f87171" 
     },
   ].map((s, i) => (
