@@ -5,8 +5,8 @@ const app = express();
 
 app.use(cors()); 
 
-const CLIENT_ID = '49140';
-const CLIENT_SECRET = '4qj8EapYYe5qe7Vip8Jy85JMQbRppQo1pSw8zfJU'; // 
+const CLIENT_ID = '49205';
+const CLIENT_SECRET = 'QyMmDTVz9nHbFlzlrUDosQh9LM5u6inJFkLLdLxe'; // 
 
 let accessToken = '';
 
