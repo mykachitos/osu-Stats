@@ -1,5 +1,5 @@
 export const MOCK_PLAYER = {
-  id: 7654321, username:"sakura_beats", country:"JP", countryFlag:"🇯🇵",
+  id: 7654321, username:"cddisc", country:"JP", countryFlag:"🇯🇵",
   globalRank:14320, countryRank:832, pp:4287.6, accuracy:97.34,
   level:87, levelProgress:63, playCount:18430, playTime:"2847h",
   rankedScore:2841930000, totalScore:8103291000, maxCombo:2148,
