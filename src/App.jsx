@@ -13,7 +13,10 @@ export const LangCtx = createContext({ lang: "en", t: T.en, setLang: () => {} })
 export const useLang = () => useContext(LangCtx);
 export const ThemeCtx = createContext({ theme: THEMES.midnight, themeKey: "midnight", setTheme: () => {} });
 export const useTheme = () => useContext(ThemeCtx);
-
+export const Notif = ({ msg, onClose }) => {
+  useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, []);
+  return <div className="notif">🌸 {msg}</div>;
+};
 export const fmt = n => n?.toLocaleString() ?? "—";
 export const Stars = ({ v }) => (
   <span className="mono" style={{ fontSize: 12, color: "#ffb6d0", letterSpacing: 1 }}>
