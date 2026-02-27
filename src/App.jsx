@@ -344,7 +344,7 @@ const Topbar = ({ title, onMenu }) => {
 
           {/* А вот и твой динамический ник */}
           <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 500 }}>
-            {user ? user.username : '{p.username}'}
+            {user ? user.username : 'Guest'}
           </span>
 
           {/* Показываем значок выхода только если пользователь авторизован */}
@@ -481,42 +481,33 @@ useEffect(() => {
   }
 
   const App = () => {
-  // 1. СНАЧАЛА ВСЕ ХУКИ (useAuth должен быть первым)
+  // 1. ХУКИ (useAuth, useState) — всегда первыми
   const { user, logout, loading } = useAuth();
   const [page, setPage] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. УСЛОВИЕ ЗАГРУЗКИ (Оно должно быть ЗДЕСЬ)
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
+  // 2. ПРОВЕРКА ЗАГРУЗКИ
+  if (loading) return <div>Loading...</div>;
 
-  // 3. ОБЪЯВЛЯЕМ pageMap ПРЯМО ТУТ (в корне функции App)
-  // Теперь она будет видна во всем, что ниже
+  // 3. ОБЪЯВЛЯЕМ pageMap (ДО return!)
+  // Убедись, что это написано ПРЯМО ЗДЕСЬ, а не внутри другого компонента
   const pageMap = {
     dashboard: <Dashboard user={user} />,
-    profile:   <Profile user={user} />,
-    stats:     <Statistics user={user} />,
-    maps:      <MapCatalog />,
-    admin:     <AdminPanel />,
+    profile: <Profile user={user} />,
+    stats: <Statistics user={user} />,
+    maps: <MapCatalog />,
+    admin: <AdminPanel />,
   };
 
-  // 4. ТВОЙ ОСНОВНОЙ ВЫВОД
+  // 4. ТВОЙ RETURN
   return (
     <div className="app-layout">
-      {/* Теперь Topbar берет данные из useAuth сам, или через пропсы */}
-      <Topbar 
-        title="osu! Stats" 
-        onMenu={() => setSidebarOpen(true)} 
-      />
-      
-      <main className="main-content">
-        {/* СТРОКА 544 ТЕПЕРЬ БУДЕТ РАБОТАТЬ! */}
+      {/* Передаем данные в Topbar */}
+      <Topbar title="osu! Stats" />
+
+      <main>
+        {/* Строка 548 теперь ТОЧНО увидит pageMap */}
         {pageMap[page] || <Dashboard user={user} />}
       </main>
-
-      {/* Модалка входа (если нужна) */}
-      {!user && <LoginModal />}
     </div>
   );
 };
