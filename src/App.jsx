@@ -303,10 +303,8 @@ const LoginModal = ({ onClose, onSuccess }) => {
 /* ══════════════════════════════════════════
    TOPBAR
 ══════════════════════════════════════════ */
-const Topbar = ({ title, onMenu }) => {
-  const { t } = useLang();
-  // Используем наш хук: вытаскиваем объект user и функцию logout
-  const { user, logout } = useAuth(); 
+const Topbar = ({ title, onMenu, user }) => { // Добавили user в пропсы
+  const { logout } = useAuth(); 
 
   return (
     <div style={{
@@ -344,8 +342,8 @@ const Topbar = ({ title, onMenu }) => {
 
           {/* А вот и твой динамический ник */}
           <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 500 }}>
-            {user ? user.username : 'Guest'}
-          </span>
+       {user ? user.username : 'Guest'} 
+       </span>
 
           {/* Показываем значок выхода только если пользователь авторизован */}
           {user && <span style={{ fontSize: 10, opacity: 0.5, marginLeft: 4 }}>Log out ↪</span>}
@@ -497,12 +495,16 @@ useEffect(() => {
     maps: <MapCatalog />,
     admin: <AdminPanel />,
   };
-
+ё
   // 4. ТВОЙ RETURN
   return (
     <div className="app-layout">
       {/* Передаем данные в Topbar */}
-      <Topbar title="osu! Stats" />
+  <Topbar 
+  title="osu! Tracker" 
+  user={user} // Передаем реального юзера сюда!
+  onMenu={() => setSidebarOpen(true)} 
+/>
 
       <main>
         {/* Строка 548 теперь ТОЧНО увидит pageMap */}

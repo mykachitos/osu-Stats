@@ -155,7 +155,7 @@ export const AdminPanel = () => {
             <span style={{fontSize:11,color:"var(--muted)",fontWeight:400,marginLeft:8}}>{lang==="ru"?"Последние 50":"Last 50"}</span>
           </div>
           {[
-            {time:"2026-02-25 14:32:11",level:"INFO",msg:"User sakura_beats logged in from JP"},
+            {time:"2026-02-25 14:32:11",level:"INFO",msg:"User cddisc logged in from JP"},
             {time:"2026-02-25 14:30:55",level:"INFO",msg:"Map catalog refreshed — 214,930 maps indexed"},
             {time:"2026-02-25 14:28:03",level:"WARN",msg:"API rate limit hit for user xXstream_godXx"},
             {time:"2026-02-25 14:20:41",level:"ERROR",msg:"Failed to fetch osu! API — retry in 30s"},

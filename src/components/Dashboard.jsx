@@ -100,7 +100,7 @@ const Dashboard = ({ user }) => {
 
           <div style={{ textAlign: "right" }}>
             <div className="mono" style={{ fontSize: 38, fontWeight: 700, color: "var(--a)", lineHeight: 1 }}>
-                {fmt(Math.round(p.pp || 0))}
+                {fmt(Math.round(stats.pp || 0))}
             </div>
             <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>Performance Points</div>
           </div>
