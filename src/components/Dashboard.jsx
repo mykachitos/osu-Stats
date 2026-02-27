@@ -27,6 +27,7 @@ const Dashboard = ({ user }) => {
   }
 
   const p = user;
+  const stats = p.statistics || {};
 
   // 2. БЕЗОПАСНЫЕ РАСЧЕТЫ (защита от белого экрана)
   const skills = (p && (p.statistics || p.params)) ? computeSkills(p) : [];
@@ -99,7 +100,7 @@ const Dashboard = ({ user }) => {
 
           <div style={{ textAlign: "right" }}>
             <div className="mono" style={{ fontSize: 38, fontWeight: 700, color: "var(--a)", lineHeight: 1 }}>
-                {fmt(Math.round(p.pp || 0))}
+                {fmt(Math.round(stats.pp || 0))}
             </div>
             <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>Performance Points</div>
           </div>
@@ -107,24 +108,48 @@ const Dashboard = ({ user }) => {
 
         {/* Stats row */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(120px,1fr))", gap: 12, marginTop: 24 }}>
-          {[
-            { l: lang === "ru" ? "Глоб. рейтинг" : "Global Rank", v: `#${fmt(p.global_rank || p.globalRank || 0)}`, icon: "🌍", c: "var(--a)" },
-            { l: lang === "ru" ? "Рейтинг страны" : "Country Rank", v: `#${fmt(p.country_rank || p.countryRank || 0)}`, icon: "🏆", c: "var(--amber)" },
-            { l: lang === "ru" ? "Точность" : "Accuracy", v: `${p.accuracy || 0}%`, icon: "◎", c: "#68d891" },
-            { l: lang === "ru" ? "Игр" : "Play Count", v: fmt(p.play_count || p.playCount || 0), icon: "▶", c: "#7eb8f7" },
-            { l: lang === "ru" ? "Время" : "Play Time", v: p.play_time || p.playTime || '0h', icon: "⏱", c: "#c084fc" },
-            { l: lang === "ru" ? "Макс. комбо" : "Max Combo", v: `${fmt(p.max_combo || p.maxCombo || 0)}x`, icon: "🔥", c: "#f87171" },
-          ].map((s, i) => (
-            <div key={i} style={{
-              background: "var(--bg2)", borderRadius: 12, padding: "12px 14px",
-              border: "1px solid var(--border)",
-            }}>
-              <div style={{ fontSize: 18, marginBottom: 6 }}>{s.icon}</div>
-              <div className="mono" style={{ fontSize: 16, fontWeight: 700, color: s.c }}>{s.v}</div>
-              <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, letterSpacing: 0.3 }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
+  {[
+    { 
+        l: lang === "ru" ? "Глоб. рейтинг" : "Global Rank", 
+        v: `#${fmt(stats.global_rank || 0)}`, 
+        icon: "🌍", c: "var(--a)" 
+    },
+    { 
+        l: lang === "ru" ? "Рейтинг страны" : "Country Rank", 
+        v: `#${fmt(stats.country_rank || 0)}`, 
+        icon: "🏆", c: "var(--amber)" 
+    },
+    { 
+        l: lang === "ru" ? "Точность" : "Accuracy", 
+        v: `${(stats.hit_accuracy || 0).toFixed(2)}%`, 
+        icon: "◎", c: "#68d891" 
+    },
+    { 
+        l: lang === "ru" ? "Игр" : "Play Count", 
+        v: fmt(stats.play_count || 0), 
+        icon: "▶", c: "#7eb8f7" 
+    },
+    { 
+        l: lang === "ru" ? "Время" : "Play Time", 
+        v: `${Math.floor((stats.play_time || 0) / 3600)}h`, 
+        icon: "⏱", c: "#c084fc" 
+    },
+    { 
+        l: lang === "ru" ? "Макс. комбо" : "Max Combo", 
+        v: `${fmt(stats.maximum_combo || 0)}x`, 
+        icon: "🔥", c: "#f87171" 
+    },
+  ].map((s, i) => (
+    <div key={i} style={{
+      background: "var(--bg2)", borderRadius: 12, padding: "12px 14px",
+      border: "1px solid var(--border)",
+    }}>
+      <div style={{ fontSize: 18, marginBottom: 6 }}>{s.icon}</div>
+      <div className="mono" style={{ fontSize: 16, fontWeight: 700, color: s.c }}>{s.v}</div>
+      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, letterSpacing: 0.3 }}>{s.l}</div>
+    </div>
+  ))}
+</div>
       </div>
 
       {/* Charts */}
