@@ -481,14 +481,17 @@ useEffect(() => {
   }
 
   const App = () => {
-  // 1. ХУК useAuth позволяет нам получить данные текущего пользователя и функцию выхода из контекста аутентификации  
+  // 1. Сначала ПРИЗЫВАМ ХУК useAuth, чтобы получить данные пользователя и статус загрузки ВАСЬ ЭТО ПИЗДЕЦ МЫ ЭТУ ХУЙНЮ ЕЩЕ ДЕЛАТЬ БУДЕМ СТО ЛЕТ Я УЖЕ ЧАС ЕБУСЬ ЧТОБЫ НИК ПОКАЗЫВАЛА. ПРОСТО ВЫВОД ЕБАНОГО НИКА А НИ ЭТА ХУЙНЯ ЭТО ПИЗДЕЦ
   const { user, logout, loading } = useAuth(); 
   const [page, setPage] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. ЕСЛИ ДАННЫЕ ЕЩЁ ЗАГРУЖАЮТСЯ, ПОКАЗЫВАЕМ ЭКРАН ЗАГРУЗКИ А НЕ ПУСТОЙ ДАШБОАРД А ТО ХУЛИ СИДЕТЬ НА ПУСТОМ ЭКРАНЕ
-  if (loading) return <div className="loading-screen">Loading...</div>;
+  // 2. Логика загрузки (ставим ПОСЛЕ хуков, но ДО pageMap)
+  if (loading) {
+    return <div className="loading-screen">Loading...</div>;
+  }
 
-  // 3. ТЕПЕРЬ определяем pageMap, используя данные из useAuth НУ И ВСЕ ЕБАТЬ БАЙБАЙ ПУСТЫЕ ЭКРАНЫ
+  // 3. ТЕПЕРЬ создаем pageMap (уже после того, как убедились, что не грузимся)
   const pageMap = {
     dashboard: <Dashboard user={user} />, 
     profile:   <Profile user={user} />,
@@ -497,13 +500,18 @@ useEffect(() => {
     admin:     <AdminPanel />,
   };
 
+  // 4. И только в самом конце — return
   return (
-    <div className="app-container">
-      {/* Передаем всё необходимое в Topbar */}
-      <Topbar title="osu! Stats" onMenu={() => setSidebarOpen(true)} />
+    <div className="app-layout">
+      {/* Теперь и Topbar, и pageMap видят переменную 'user' */}
+      <Topbar 
+        title="osu! Stats" 
+        onMenu={() => setSidebarOpen(true)} 
+      />
       
-      <main>
-        {pageMap[page]}
+      <main className="content">
+        {/* Вот тут вызывается pageMap, и теперь он точно определен выше */}
+        {pageMap[page] || <Dashboard user={user} />}
       </main>
     </div>
   );
