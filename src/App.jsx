@@ -16,6 +16,7 @@ import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
 import Profile from './components/Profile';
 import { AdminPanel, MapCatalog } from './components/Pages';
+import { useAuth } from './context/AuthContext';
 
 
 export const LangCtx = createContext({ lang: "en", t: T.en, setLang: () => {} });
@@ -298,36 +299,48 @@ const LoginModal = ({ onClose, onSuccess }) => {
 /* ══════════════════════════════════════════
    TOPBAR
 ══════════════════════════════════════════ */
-const Topbar = ({ title, onMenu, onLogout }) => {
+const Topbar = ({ title, onMenu }) => {
   const { t } = useLang();
-  // вася я я ща пью колу кушаю питсу вот вроде норм должно быть
-  const { user } = useAuth(); 
+  // ну тут мы используем хук useAuth, который мы создали в AuthContext.jsx, чтобы получить данные о пользователе и функцию выхода из системы. Это позволяет нам отображать имя пользователя и кнопку выхода в топбаре.
+  const { user, logout } = useAuth(); 
 
   return (
     <div style={{
-      height:58,borderBottom:"1px solid var(--border)",
-      background:"rgba(7,11,20,0.85)",backdropFilter:"blur(12px)",
-      display:"flex",alignItems:"center",padding:"0 24px",gap:14,
-      position:"sticky",top:0,zIndex:100,
+      height:58, borderBottom:"1px solid var(--border)",
+      background:"rgba(7,11,20,0.85)", backdropFilter:"blur(12px)",
+      display:"flex", alignItems:"center", padding:"0 24px", gap:14,
+      position:"sticky", top:0, zIndex:100,
     }}>
       <button onClick={onMenu} className="btn-ghost" style={{
-        display:"none",padding:"6px 10px",fontSize:16,borderRadius:8,
+        display:"none", padding:"6px 10px", fontSize:16, borderRadius:8,
       }} id="mobile-menu-btn">☰</button>
-      <h1 className="syne" style={{fontSize:16,fontWeight:700}}>{title}</h1>
-      <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:12}}>
+
+      <h1 className="syne" style={{fontSize:16, fontWeight:700}}>{title}</h1>
+
+      <div style={{marginLeft:"auto", display:"flex", alignItems:"center", gap:12}}>
         <ThemeSwitcher/>
         <LangToggle/>
+
+        {/* Секция пользователя */}
         <div style={{
           display: "flex", alignItems: "center", gap: 8,
           background: "var(--card2)", border: "1px solid var(--border)",
           borderRadius: 20, padding: "5px 12px", cursor: "pointer",
-        }} onClick={onLogout} title="Click to Logout">
-          <div style={{width: 7, height: 7, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.6)"}}/>
+        }} onClick={logout} title="Click to Logout">
+          
+          {/* Индикатор онлайна (зеленая точка) */}
+          <div style={{
+            width: 7, height: 7, borderRadius: "50%", 
+            background: user ? "#4ade80" : "#94a3b8", // Зеленый если вошел, серый если нет
+            boxShadow: user ? "0 0 6px rgba(74,222,128,0.6)" : "none"
+          }}/>
+
           <span style={{fontSize: 12, color: "var(--muted)", fontWeight: 500}}>
-            {/*в будущем сюда над вставить userdata */}
-            sakura_beats
+            {/* Если юзер есть — пишем ник, если нет — Guest */}
+            {user ? user.username : 'Guest'}
           </span>
-          <span style={{fontSize: 10, opacity: 0.5, marginLeft: 4}}>Log out ↪</span>
+
+          {user && <span style={{fontSize: 10, opacity: 0.5, marginLeft: 4}}>Log out ↪</span>}
         </div>
       </div>
     </div>

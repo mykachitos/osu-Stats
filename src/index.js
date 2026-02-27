@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './context/AuthContext';
+
+// .не нужно оборачивать App в AuthProvider дважды, достаточно одного раза. Поэтому я удалил второй вызов ReactDOM.createRoot и оставил только один, который оборачивает App в AuthProvider.
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
