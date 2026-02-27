@@ -481,33 +481,42 @@ useEffect(() => {
   }
 
   const App = () => {
-  // 1. ХУКИ (useAuth, useState) — всегда первыми
+  // 1. СНАЧАЛА ВСЕ ХУКИ (useAuth должен быть первым)
   const { user, logout, loading } = useAuth();
   const [page, setPage] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. ПРОВЕРКА ЗАГРУЗКИ
-  if (loading) return <div>Loading...</div>;
+  // 2. УСЛОВИЕ ЗАГРУЗКИ (Оно должно быть ЗДЕСЬ)
+  if (loading) {
+    return <div className="loading-screen">Loading...</div>;
+  }
 
-  // 3. ОБЪЯВЛЯЕМ pageMap (ДО return!)
-  // Убедись, что это написано ПРЯМО ЗДЕСЬ, а не внутри другого компонента
+  // 3. ОБЪЯВЛЯЕМ pageMap ПРЯМО ТУТ (в корне функции App)
+  // Теперь она будет видна во всем, что ниже
   const pageMap = {
     dashboard: <Dashboard user={user} />,
-    profile: <Profile user={user} />,
-    stats: <Statistics user={user} />,
-    maps: <MapCatalog />,
-    admin: <AdminPanel />,
+    profile:   <Profile user={user} />,
+    stats:     <Statistics user={user} />,
+    maps:      <MapCatalog />,
+    admin:     <AdminPanel />,
   };
 
-  // 4. ТВОЙ RETURN
+  // 4. ТВОЙ ОСНОВНОЙ ВЫВОД
   return (
     <div className="app-layout">
-      {/* Передаем данные в Topbar */}
-      <Topbar title="osu! Stats" />
-
-      <main>
-        {/* Строка 548 теперь ТОЧНО увидит pageMap */}
+      {/* Теперь Topbar берет данные из useAuth сам, или через пропсы */}
+      <Topbar 
+        title="osu! Stats" 
+        onMenu={() => setSidebarOpen(true)} 
+      />
+      
+      <main className="main-content">
+        {/* СТРОКА 544 ТЕПЕРЬ БУДЕТ РАБОТАТЬ! */}
         {pageMap[page] || <Dashboard user={user} />}
       </main>
+
+      {/* Модалка входа (если нужна) */}
+      {!user && <LoginModal />}
     </div>
   );
 };
@@ -540,9 +549,7 @@ useEffect(() => {
               onMenu={()=>setSidebarOpen(!sidebarOpen)}
               onLogout={handleLogout}
             />
-            <div style={{flex:1,padding:"24px 22px",maxWidth:1180,width:"100%",margin:"0 auto"}} key={page}>
-              {pageMap[page]}
-            </div>
+            
           </main>
         </div>
 
