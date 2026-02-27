@@ -344,7 +344,7 @@ const Topbar = ({ title, onMenu }) => {
 
           {/* А вот и твой динамический ник */}
           <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 500 }}>
-            {user ? user.username : 'Guest'}
+            {user ? user.username : '{p.username}'}
           </span>
 
           {/* Показываем значок выхода только если пользователь авторизован */}
