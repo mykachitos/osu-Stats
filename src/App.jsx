@@ -5,7 +5,6 @@ import {
   AreaChart, Area,
 } from "recharts";
 
-//импортируем все отовсюду
 import { T } from './constants/translations';
 import { THEMES } from './constants/themes';
 import { MOCK_PLAYER, RECOMMENDED_MAPS, ADMIN_USERS } from './constants/mockData';
@@ -23,45 +22,6 @@ export const useLang = () => useContext(LangCtx);
 
 export const ThemeCtx = createContext({ theme: THEMES.midnight, themeKey: "midnight", setTheme: () => {} });
 export const useTheme = () => useContext(ThemeCtx);
-
-const LangToggle = () => {
-  const { lang, setLang } = useLang();
-  return (
-    <div style={{display:"flex",alignItems:"center",
-      background:"var(--card2)",border:"1px solid var(--border)",borderRadius:20,overflow:"hidden"}}>
-      {["en","ru"].map(l=>(
-        <button key={l} onClick={()=>setLang(l)} style={{
-          padding:"4px 12px",fontSize:12,fontWeight:800,
-          background:lang===l?"var(--a)":"transparent",
-          color:lang===l?"white":"var(--muted)",
-          border:"none",cursor:"pointer",fontFamily:"inherit",transition:"all 0.2s",
-        }}>{l.toUpperCase()}</button>
-      ))}
-    </div>
-  );
-};
-
-const ThemeSwitcher = () => {
-  const { themeKey, setTheme } = useTheme();
-  const { lang } = useLang();
-  return (
-    <div style={{display:"flex",gap:6,alignItems:"center"}}>
-      {Object.entries(THEMES).map(([k,th])=>(
-        <button key={k} onClick={()=>setTheme(k)}
-          title={lang==="ru"?th.nameRu:th.name}
-          style={{
-            width:22,height:22,borderRadius:"50%",
-            border:`2px solid ${themeKey===k?th.accent:"transparent"}`,
-            background:th.gradient,cursor:"pointer",transition:"border 0.2s",
-          }}/>
-      ))}
-    </div>
-  );
-};
-
-
-
-
 
 /* ══════════════════════════════════════════
    HELPERS
@@ -103,6 +63,23 @@ const SakuraPetals = () => {
 /* ══════════════════════════════════════════
    LANDING PAGE
 ══════════════════════════════════════════ */
+const LangToggle = () => {
+  const { lang, setLang } = useLang();
+  return (
+    <div style={{display:"flex",alignItems:"center",
+      background:"var(--card2)",border:"1px solid var(--border)",borderRadius:20,overflow:"hidden"}}>
+      {["en","ru"].map(l=>(
+        <button key={l} onClick={()=>setLang(l)} style={{
+          padding:"4px 12px",fontSize:12,fontWeight:800,
+          background:lang===l?"var(--a)":"transparent",
+          color:lang===l?"white":"var(--muted)",
+          border:"none",cursor:"pointer",fontFamily:"inherit",transition:"all 0.2s",
+        }}>{l.toUpperCase()}</button>
+      ))}
+    </div>
+  );
+};
+
 const Landing = ({ onLogin }) => {
   const { t } = useLang();
   const { theme } = useTheme();
@@ -111,17 +88,15 @@ const Landing = ({ onLogin }) => {
 
   return (
     <div style={{minHeight:"100vh", position:"relative", overflow:"hidden"}}>
-      {/* Background effects */}
       <div className="grid-bg"/>
       <SakuraPetals/>
       <div className="orb" style={{width:600,height:600,background:`radial-gradient(circle,${theme.accentDim.replace("0.07","0.15")} 0%,transparent 70%)`,top:-200,right:-100}}/>
       <div className="orb" style={{width:400,height:400,background:`radial-gradient(circle,rgba(255,182,193,0.08) 0%,transparent 70%)`,bottom:100,left:-150}}/>
 
-      {/* Navbar */}
       <nav style={{
         position:"sticky",top:0,zIndex:100,padding:"0 5%",
         height:64,display:"flex",alignItems:"center",justifyContent:"space-between",
-        background:"rgba(7,11,20,0.7)",backdropFilter:"blur(16px)",
+        background:`${theme.bg2}cc`,backdropFilter:"blur(16px)",
         borderBottom:"1px solid var(--border)",
       }}>
         <div className="syne" style={{fontSize:20,fontWeight:800,letterSpacing:-0.5}}>
@@ -134,7 +109,6 @@ const Landing = ({ onLogin }) => {
         </div>
       </nav>
 
-      {/* Hero */}
       <section style={{padding:"100px 5% 80px",textAlign:"center",position:"relative",zIndex:1}}>
         <div className="fu" style={{
           display:"inline-flex",alignItems:"center",gap:8,
@@ -166,7 +140,6 @@ const Landing = ({ onLogin }) => {
           </button>
         </div>
 
-        {/* Stats bar */}
         <div className="fu d4" style={{
           display:"flex",justifyContent:"center",gap:"clamp(24px,4vw,60px)",
           marginTop:60,flexWrap:"wrap",
@@ -180,7 +153,6 @@ const Landing = ({ onLogin }) => {
         </div>
       </section>
 
-      {/* Features */}
       <section style={{padding:"60px 5%",position:"relative",zIndex:1}}>
         <h2 className="syne fu" style={{textAlign:"center",fontSize:32,fontWeight:800,marginBottom:12}}>
           {lt.featTitle}
@@ -210,7 +182,6 @@ const Landing = ({ onLogin }) => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer style={{
         borderTop:"1px solid var(--border)",padding:"24px 5%",
         display:"flex",alignItems:"center",justifyContent:"center",
@@ -228,12 +199,11 @@ const Landing = ({ onLogin }) => {
 const LoginModal = ({ onClose, onSuccess }) => {
   const { t } = useLang();
   const { theme } = useTheme();
-  const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(0); // 0=prompt, 1=loading, 2=success
+  const [step, setStep] = useState(0);
 
   const handleLogin = () => {
-    const clientID= '49205'
-    const redirectUri = encodeURIComponent('https://osu-stats-five.vercel.app/');
+    const clientID= '49185';
+    const redirectUri = encodeURIComponent('https://osu-stats-experiments.vercel.app/');
     window.location.href = `https://osu.ppy.sh/oauth/authorize?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=identify+public`;
   };
 
@@ -284,26 +254,20 @@ const LoginModal = ({ onClose, onSuccess }) => {
         )}
         <button className="btn-ghost" style={{width:"100%", padding:"8px", marginTop:16}}
           onClick={onClose}>Cancel</button>
-          
       </div>
     </div>
   );
 };
 
 /* ══════════════════════════════════════════
-   SIDEBAR
+   TOPBAR — uses theme bg colors
 ══════════════════════════════════════════ */
-
-
-/* ══════════════════════════════════════════
-   TOPBAR
-══════════════════════════════════════════ */
-const Topbar = ({ title, onMenu, onLogout }) => {
-  const { t } = useLang();
+const Topbar = ({ title, onMenu, onLogout, username }) => {
+  const { theme } = useTheme();
   return (
     <div style={{
       height:58,borderBottom:"1px solid var(--border)",
-      background:"rgba(7,11,20,0.85)",backdropFilter:"blur(12px)",
+      background:`${theme.bg2}e0`,backdropFilter:"blur(12px)",
       display:"flex",alignItems:"center",padding:"0 24px",gap:14,
       position:"sticky",top:0,zIndex:100,
     }}>
@@ -312,8 +276,6 @@ const Topbar = ({ title, onMenu, onLogout }) => {
       }} id="mobile-menu-btn">☰</button>
       <h1 className="syne" style={{fontSize:16,fontWeight:700}}>{title}</h1>
       <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:12}}>
-        <ThemeSwitcher/>
-        <LangToggle/>
         <div style={{
           display: "flex", alignItems: "center", gap: 8,
           background: "var(--card2)", border: "1px solid var(--border)",
@@ -321,8 +283,7 @@ const Topbar = ({ title, onMenu, onLogout }) => {
         }} onClick={onLogout} title="Click to Logout">
           <div style={{width: 7, height: 7, borderRadius: "50%", background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.6)"}}/>
           <span style={{fontSize: 12, color: "var(--muted)", fontWeight: 500}}>
-            {/*в будущем сюда над вставить userdata */}
-            sakura_beats
+            {username || "sakura_beats"}
           </span>
           <span style={{fontSize: 10, opacity: 0.5, marginLeft: 4}}>Log out ↪</span>
         </div>
@@ -332,97 +293,53 @@ const Topbar = ({ title, onMenu, onLogout }) => {
 };
 
 /* ══════════════════════════════════════════
-   STAT CARD (reusable)
-══════════════════════════════════════════ */
-const StatCard = ({ icon, label, value, color, delay=0, sub }) => (
-  <div className={`card fu d${delay}`} style={{padding:"18px 20px",position:"relative",overflow:"hidden"}}>
-    <div style={{position:"absolute",top:0,right:0,width:60,height:60,
-      borderRadius:"50%",background:`${color}12`,transform:"translate(20px,-20px)"}}/>
-    <div style={{fontSize:18,color,marginBottom:8}}>{icon}</div>
-    <div className="mono" style={{fontSize:20,fontWeight:700,color,lineHeight:1}}>{value}</div>
-    {sub&&<div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{sub}</div>}
-    <div style={{fontSize:11,color:"var(--muted)",marginTop:4,letterSpacing:0.4}}>{label}</div>
-  </div>
-);
-
-/* ══════════════════════════════════════════
-   DASHBOARD
-══════════════════════════════════════════ */
-
-/* ══════════════════════════════════════════
-   PROFILE
-══════════════════════════════════════════ */
-
-
-/* ══════════════════════════════════════════
-   STATISTICS
-══════════════════════════════════════════ */
-
-
-/* ══════════════════════════════════════════
-   MAP CATALOG
-══════════════════════════════════════════ */
-
-/* ══════════════════════════════════════════
-   ADMIN PANEL
-══════════════════════════════════════════ */
-
-
-/* ══════════════════════════════════════════
    ROOT APP
 ══════════════════════════════════════════ */
 export default function App() {
-// читаем сохраненную сессию
   const savedSession = JSON.parse(localStorage.getItem('osu_session'));
 
-  const [userData, setUserData] = useState(savedSession); 
+  const [userData, setUserData] = useState(savedSession);
   const [lang, setLang] = useState("en");
   const [themeKey, setThemeKey] = useState("midnight");
-  // если пользователь сохранен --> дашбоард    
-  // если нет --> лендинг
   const [page, setPage] = useState(savedSession ? "dashboard" : "landing");
-  const [loggedIn, setLoggedIn] = useState(!!savedSession); 
+  const [loggedIn, setLoggedIn] = useState(!!savedSession);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [authError, setAuthError] = useState(null); 
+  const [authError, setAuthError] = useState(null);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
 
-//  никит я ебал ТВОЙ РОТ ПОЧЕМУ У ТЕБЯ ВЕСЬ ФРОНТЕДН В ОДНОМ ФАЙЛЕ НА 2 ТЫЩИ СТРОК
-useEffect(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
+    if (code) {
+      window.history.replaceState({}, document.title, window.location.pathname);
 
-  if (code) {
-    // jчистка URL чтобы код не заюзали дважды
-    window.history.replaceState({}, document.title, window.location.pathname);
+      fetch('/api/get-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Authentication failed on server');
+        return res.json();
+      })
+      .then(data => {
+        setUserData(data);
+        setLoggedIn(true);
+        setPage("dashboard");
+        localStorage.setItem('osu_session', JSON.stringify(data));
+        setAuthError(null);
+      })
+      .catch(err => {
+        console.error("Auth Error:", err);
+        setAuthError("Failed to login. Please try again.");
+        setLoggedIn(false);
+      });
+    }
+  }, []);
 
-    fetch('/api/get-user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    })
-    .then(res => {
-      if (!res.ok) throw new Error('Authentication failed on server');
-      return res.json();
-    })
-    .then(data => {
-      // охраняем всё: и в стейт и в память браузера
-      setUserData(data);
-      setLoggedIn(true);
-      setPage("dashboard");
-      localStorage.setItem('osu_session', JSON.stringify(data));
-      setAuthError(null); 
-    })
-    .catch(err => {
-      console.error("Auth Error:", err);
-      setAuthError("Failed to login. Please try again."); // ошибка + вывод в консоль этой ошибки
-      setLoggedIn(false);
-    });
-  }
-}, []);
-
-  const theme = THEMES[themeKey];
+  const theme = THEMES[themeKey] || THEMES.midnight;
   const t = { ...T[lang], lang };
 
   const titles = {
@@ -432,16 +349,16 @@ useEffect(() => {
 
   const handleLogin = () => { setLoggedIn(true); setPage("dashboard"); };
   const handleLogout = () => {
-   localStorage.removeItem('osu_session'); 
-    setUserData(null);                      
-   setLoggedIn(false);                     
-    setPage("landing");                     
+    localStorage.removeItem('osu_session');
+    setUserData(null);
+    setLoggedIn(false);
+    setPage("landing");
   };
-  
+
   if (!loggedIn) {
     return (
       <LangCtx.Provider value={{lang, t, setLang}}>
-        <ThemeCtx.Provider value={{theme,themeKey,setTheme:k=>{setThemeKey(k)}}}>
+        <ThemeCtx.Provider value={{theme, themeKey, setTheme: k => setThemeKey(k)}}>
           <GlobalStyle theme={theme}/>
           <div className="grid-bg"/>
           <Landing onLogin={()=>setShowLogin(true)}/>
@@ -458,15 +375,15 @@ useEffect(() => {
 
   const pageMap = {
     dashboard: <Dashboard user={userData || MOCK_PLAYER} />,
-    profile: <Profile user={userData || MOCK_PLAYER} />,
-    stats: <Statistics user={userData || MOCK_PLAYER} />,
-    maps:      <MapCatalog/>,
+    profile:   <Profile user={userData || MOCK_PLAYER} />,
+    stats:     <Statistics user={userData || MOCK_PLAYER} />,
+    maps:      <MapCatalog user={userData || MOCK_PLAYER} />,
     admin:     <AdminPanel/>,
   };
 
   return (
     <LangCtx.Provider value={{lang, t, setLang}}>
-      <ThemeCtx.Provider value={{theme,themeKey,setTheme:k=>setThemeKey(k)}}>
+      <ThemeCtx.Provider value={{theme, themeKey, setTheme: k => setThemeKey(k)}}>
         <GlobalStyle theme={theme}/>
         <div className="grid-bg"/>
         <div className="orb" style={{width:500,height:500,background:`radial-gradient(circle,${theme.accentDim.replace("0.07","0.08")} 0%,transparent 70%)`,top:-100,right:-100}}/>
@@ -492,6 +409,7 @@ useEffect(() => {
               title={titles[page]}
               onMenu={()=>setSidebarOpen(!sidebarOpen)}
               onLogout={handleLogout}
+              username={userData?.username}
             />
             <div style={{flex:1,padding:"24px 22px",maxWidth:1180,width:"100%",margin:"0 auto"}} key={page}>
               {pageMap[page]}
