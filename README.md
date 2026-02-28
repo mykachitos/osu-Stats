@@ -3,7 +3,7 @@
 [![Vercel Deployment](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 
-**osu!Stats App** — это продвинутый аналитический инструмент для игроков osu!, который превращает сухие цифры профиля в интерактивные инсайты и наглядные графики.
+**osu!Tracker App** — это продвинутый аналитический инструмент для игроков osu!, который превращает сухие цифры профиля в интерактивные инсайты и наглядные графики.
 
 ---
 
