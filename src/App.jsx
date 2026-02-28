@@ -202,8 +202,8 @@ const LoginModal = ({ onClose, onSuccess }) => {
   const [step, setStep] = useState(0);
 
   const handleLogin = () => {
-    const clientID= '49185';
-    const redirectUri = encodeURIComponent('https://osu-stats-experiments.vercel.app/');
+    const clientID= '49205';
+    const redirectUri = encodeURIComponent('https://osu-stats-five.vercel.app//');
     window.location.href = `https://osu.ppy.sh/oauth/authorize?client_id=${clientID}&response_type=code&redirect_uri=${redirectUri}&scope=identify+public`;
   };
 
