@@ -308,36 +308,28 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [authError, setAuthError] = useState(null);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+ useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
 
-    if (code) {
-      window.history.replaceState({}, document.title, window.location.pathname);
+  // Добавляем проверку, чтобы не слать запрос, если юзер уже загружен
+  if (code && !user) {
+    console.log("Пытаюсь авторизоваться с кодом:", code);
+    
+    // Сразу чистим URL, чтобы повторный рендер не подхватил код
+    window.history.replaceState({}, document.title, "/");
 
-      fetch('/api/get-user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
-      })
+    axios.get(`http://localhost:5000/api/auth/osu?code=${code}`)
       .then(res => {
-        if (!res.ok) throw new Error('Authentication failed on server');
-        return res.json();
-      })
-      .then(data => {
-        setUserData(data);
-        setLoggedIn(true);
-        setPage("dashboard");
-        localStorage.setItem('osu_session', JSON.stringify(data));
-        setAuthError(null);
+        console.log("Успешный вход!", res.data);
+        setUser(res.data.user);
       })
       .catch(err => {
-        console.error("Auth Error:", err);
-        setAuthError("Failed to login. Please try again.");
-        setLoggedIn(false);
+        console.error("Детальная ошибка бэкенда:", err.response?.data || err.message);
+        alert("Ошибка авторизации. Проверь консоль сервера.");
       });
-    }
-  }, []);
+  }
+}, [user]); // Добавляем зависимость
 
   const theme = THEMES[themeKey] || THEMES.midnight;
   const t = { ...T[lang], lang };
