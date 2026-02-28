@@ -16,6 +16,8 @@ import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
 import Profile from './components/Profile';
 import { AdminPanel, MapCatalog } from './components/Pages';
+import axios from 'axios';
+
 
 
 export const LangCtx = createContext({ lang: "en", t: T.en, setLang: () => {} });
@@ -23,7 +25,6 @@ export const useLang = () => useContext(LangCtx);
 
 export const ThemeCtx = createContext({ theme: THEMES.midnight, themeKey: "midnight", setTheme: () => {} });
 export const useTheme = () => useContext(ThemeCtx);
-import axios from 'axios';
 
 /* ══════════════════════════════════════════
    HELPERS
